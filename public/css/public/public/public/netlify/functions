@@ -1,0 +1,21 @@
+import sqlite3
+import json
+
+def get_db_connection():
+    conn = sqlite3.connect('mangas.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def handler(event, context):
+    try:
+        conn = get_db_connection()
+        mangas = conn.execute('SELECT id, title, folder_name, avg_rating FROM mangas ORDER BY title').fetchall()
+        conn.close()
+        mangas_list = [dict(manga) for manga in mangas]
+        return {
+            'statusCode': 200,
+            'headers': { 'Content-Type': 'application/json' },
+            'body': json.dumps(mangas_list)
+        }
+    except Exception as e:
+        return {'statusCode': 500, 'body': json.dumps({'error': str(e)})}
