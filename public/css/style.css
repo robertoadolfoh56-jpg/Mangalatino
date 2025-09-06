@@ -1,0 +1,55 @@
+/* --- Paleta de Colores: Negro, Morado y Violeta --- */
+:root {
+    --background-dark: #101014;
+    --background-light: #1c1c22;
+    --primary-accent: #8A2BE2;
+    --secondary-accent: #9370DB;
+    --text-light: #f0f0f5;
+    --border-color: #3a3a44;
+}
+
+/* --- Estilos Globales --- */
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    margin: 0;
+    line-height: 1.6;
+}
+
+a {
+    color: var(--secondary-accent);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--primary-accent);
+}
+
+/* --- Título Principal y Barra de Navegación --- */
+.nav-brand, h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+}
+
+/* --- Contenedores Principales --- */
+.container {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--background-light);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+/* ... (Aquí irían todos los demás estilos que hemos creado) ... */
