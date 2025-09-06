@@ -1,0 +1,13 @@
+[build]
+  command = "pip install -r requirements.txt"
+  functions = "netlify/functions"
+  publish = "public"
+
+[functions]
+  included_files = ["mangas.db"]
+
+# Regla para que /rate/1 llame a la función rate_manga?id=1
+[[redirects]]
+  from = "/rate/:id"
+  to = "/.netlify/functions/rate_manga?id=:id"
+  status = 200
