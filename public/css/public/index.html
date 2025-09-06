@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Manga Latino MX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Manga Latino MX</h1>
+        <div id="manga-gallery" class="galeria">
+            <p>Cargando mangas...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Llama a nuestra función serverless para obtener los mangas
+            fetch('/.netlify/functions/get_mangas')
+                .then(response => response.json())
+                .then(mangas => {
+                    const gallery = document.getElementById('manga-gallery');
+                    gallery.innerHTML = ''; // Limpia el mensaje de "Cargando..."
+
+                    if (mangas.length === 0) {
+                        gallery.innerHTML = '<p>No se encontraron mangas.</p>';
+                        return;
+                    }
+
+                    // Construye la galería dinámicamente
+                    mangas.forEach(manga => {
+                        const mangaItem = `
+                            <a href="/manga.html?id=${manga.id}" style="text-decoration: none; color: inherit;">
+                                <div class="manga-item">
+                                    <img src="/images/${manga.folder_name}/cover.jpg" alt="Portada de ${manga.title}">
+                                    <p>${manga.title}</p>
+                                </div>
+                            </a>
+                        `;
+                        gallery.insertAdjacentHTML('beforeend', mangaItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar los mangas:', error);
+                    document.getElementById('manga-gallery').innerHTML = '<p>Error al cargar los mangas.</p>';
+                });
+        });
+    </script>
+</body>
+</html>
