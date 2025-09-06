@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión - Manga Latino MX</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 500px;">
+        <h1>Iniciar Sesión</h1>
+        <div id="message-container"></div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Nombre de Usuario:</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px;">
+            ¿No tienes una cuenta? <a href="/register.html">Regístrate aquí</a>
+        </p>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageContainer = document.getElementById('message-container');
+
+            const response = await fetch('/.netlify/functions/login', {
+                method: 'POST',
+                body: JSON.stringify({ username, password })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('authToken', data.token);
+                messageContainer.innerHTML = `<p style="color: lightgreen;">${data.message}. Redirigiendo...</p>`;
+                setTimeout(() => { window.location.href = '/'; }, 1500);
+            } else {
+                messageContainer.innerHTML = `<p style="color: lightcoral;">Error: ${data.error}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
