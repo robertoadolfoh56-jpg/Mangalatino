@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando... - Manga Latino MX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="manga-details-container" class="container">
+        <p>Cargando detalles del manga...</p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mangaId = new URLSearchParams(window.location.search).get('id');
+            if (!mangaId) {
+                document.getElementById('manga-details-container').innerHTML = '<h1>Error: Manga no especificado.</h1>';
+                return;
+            }
+
+            fetch(`/.netlify/functions/get_manga_details?id=${mangaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('manga-details-container');
+                    const manga = data.details;
+                    const chapters = data.chapters;
+                    document.title = `${manga.title} - Manga Latino MX`;
+
+                    let chaptersHtml = chapters.map(c => `<li><a href="#">${c.chapter_name}</a></li>`).join('');
+                    
+                    container.innerHTML = `
+                        <div class="manga-header">
+                            <img src="/images/${manga.folder_name}/cover.jpg" alt="Portada de ${manga.title}">
+                            <div>
+                                <h1>${manga.title}</h1>
+                                <div class="manga-metadata">
+                                    <p><strong>Autor:</strong> ${manga.author || 'No disponible'}</p>
+                                    <p><strong>Estado:</strong> ${manga.status || 'No disponible'}</p>
+                                    <p><strong>Géneros:</strong> ${manga.genre || 'No disponible'}</p>
+                                    <p class="description">${manga.description || ''}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <h3>Capítulos</h3>
+                        <ul class="lista-capitulos">${chaptersHtml}</ul>
+                        <a href="/" class="volver">&larr; Volver a la galería</a>
+                    `;
+                });
+        });
+    </script>
+</body>
+</html>
